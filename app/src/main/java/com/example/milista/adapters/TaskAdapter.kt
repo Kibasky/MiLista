@@ -3,15 +3,28 @@ package com.example.milista.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.milista.data.Task
+import com.example.milista.data.entities.Task
 import com.example.milista.databinding.ItemTaskBinding
 
-class TaskAdapter(var items: List<Task>, val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<ViewHolder>() {
+class TaskAdapter(
+    var items: List<Task>,
+    val onItemClick: (Int) -> Unit,
+    val onItemCheck: (Int) -> Unit,
+    val onItemDelete: (Int) -> Unit
+) : RecyclerView.Adapter<ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = items[position]
         holder.render(task)
         holder.itemView.setOnClickListener {
             onItemClick(position)
+        }
+        holder.binding.doneCheckBox.setOnCheckedChangeListener { checkBox, isChecked ->
+            if (checkBox.isPressed) {
+                onItemCheck(position)
+            }
+        }
+        holder.binding.deleteButton.setOnClickListener {
+            onItemDelete(position)
         }
     }
 

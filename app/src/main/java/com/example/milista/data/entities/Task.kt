@@ -1,4 +1,4 @@
-package com.example.milista.data
+package com.example.milista.data.entities
 
 data class Task(
     val id: Long,

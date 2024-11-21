@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
-import com.example.milista.data.Task
+import com.example.milista.data.entities.Task
 import com.example.milista.utils.DatabaseManager
 
 class TaskDAO(val context: Context) {

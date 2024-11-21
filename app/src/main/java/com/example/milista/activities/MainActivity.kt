@@ -2,15 +2,12 @@ package com.example.milista.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.telephony.ims.RcsUceAdapter
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.milista.R
 import com.example.milista.adapters.TaskAdapter
-import com.example.milista.data.Task
+import com.example.milista.data.entities.Task
 import com.example.milista.data.providers.TaskDAO
 import com.example.milista.databinding.ActivityMainBinding
 
@@ -22,7 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var taskDAO: TaskDAO
 
-    var taskList: List<Task> = emptyList()
+    var taskList: MutableList<Task> = mutableListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +44,16 @@ class MainActivity : AppCompatActivity() {
         taskDAO.insert(Task(-1, "Pagar el alquiler"))
         taskDAO.insert(Task(-1, "Pasear al perro"))*/
 
-        adapter = TaskAdapter(taskList) {
+        adapter = TaskAdapter(taskList, {
             val task = taskList[it]
-            task.done = !task.done
-            taskDAO.update(task)
-            adapter.updateItems(taskList)
-        }
+            showTask(task)
+        }, {
+            val task = taskList[it]
+            checkTask(task)
+        }, {
+            val task = taskList[it]
+            deleteTask(task)
+        })
 
 
         binding.recyclerView.adapter = adapter
@@ -66,8 +68,26 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        taskList = taskDAO.findAll()
+        taskList = taskDAO.findAll().toMutableList()
 
         adapter.updateItems(taskList)
+    }
+
+    fun checkTask(task: Task) {
+        task.done = !task.done
+        taskDAO.update(task)
+        adapter.updateItems(taskList)
+    }
+
+    fun deleteTask(task: Task) {
+        taskDAO.delete(task)
+        taskList.remove(task)
+        adapter.updateItems(taskList)
+    }
+
+    fun showTask(task: Task) {
+        val intent = Intent(this, TaskActivity::class.java)
+        intent.putExtra(TaskActivity.EXTRA_TASK_ID, task.id)
+        startActivity(intent)
     }
 }

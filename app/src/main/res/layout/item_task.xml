@@ -4,6 +4,12 @@
     android:layout_height="wrap_content"
     android:padding="10sp">
 
+    <CheckBox
+        android:id="@+id/doneCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"/>
+
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"

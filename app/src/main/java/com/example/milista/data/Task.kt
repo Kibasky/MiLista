@@ -3,7 +3,7 @@ package com.example.milista.data
 data class Task(
     val id: Long,
     var name: String,
-    var done: Boolean
+    var done: Boolean = false
 ) {
     companion object {
         const val TABLE_NAME = "Task"
@@ -11,5 +11,4 @@ data class Task(
         const val COLUMN_NAME = "name"
         const val COLUMN_DONE = "done"
     }
-
 }

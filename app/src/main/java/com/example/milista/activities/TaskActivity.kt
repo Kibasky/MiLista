@@ -1,6 +1,7 @@
 package com.example.milista.activities
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,7 +22,7 @@ class TaskActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
 
         binding = ActivityTaskBinding.inflate(layoutInflater)
 
@@ -35,6 +36,7 @@ class TaskActivity : AppCompatActivity() {
 
         taskDAO = TaskDAO(this)
 
+        // Si nos pasan un id es que queremos editar una tarea existente
         val id = intent.getLongExtra(EXTRA_TASK_ID, -1L)
         if (id != -1L) {
             task = taskDAO.findById(id)!!
@@ -43,6 +45,7 @@ class TaskActivity : AppCompatActivity() {
             task = Task(-1, "")
         }
 
+        // Comprobamos el texto introducido para mostrar posibles errores
         binding.saveButton.setOnClickListener {
             val taskName = binding.nameTextField.editText?.text.toString()
             if (taskName.isEmpty()) {
@@ -56,6 +59,7 @@ class TaskActivity : AppCompatActivity() {
 
             task.name = taskName
 
+            // Si la tarea existe la actualizamos si no la insertamos
             if (task.id != -1L) {
                 taskDAO.update(task)
             } else {

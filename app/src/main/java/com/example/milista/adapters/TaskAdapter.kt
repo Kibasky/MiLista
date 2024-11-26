@@ -12,6 +12,12 @@ class TaskAdapter(
     val onItemCheck: (Int) -> Unit,
     val onItemDelete: (Int) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = items[position]
         holder.render(task)
@@ -26,11 +32,6 @@ class TaskAdapter(
         holder.binding.deleteButton.setOnClickListener {
             onItemDelete(position)
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
